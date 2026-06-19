@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>攻略 · Dragon Village 3</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- Markdown 渲染與淨化（線上載入；離線時會自動降級成純文字） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+</head>
+<body>
+
+  <main class="wrap">
+    <a class="back-link" href="index.html">← 回攻略總覽</a>
+
+    <!-- 找不到攻略 -->
+    <div class="empty" id="notfound" style="display:none">
+      <div class="big">🔍</div>
+      <p>找不到這篇攻略。</p>
+      <p><a href="index.html">回到攻略總覽</a></p>
+    </div>
+
+    <!-- 攻略內容 -->
+    <div class="article-layout" id="article" style="display:none">
+      <article>
+        <header class="article-head">
+          <div class="tiers" id="art-tiers"></div>
+          <h1 id="art-title"></h1>
+          <div class="article-meta" id="art-meta"></div>
+          <div class="article-cover" id="art-cover" style="display:none"></div>
+        </header>
+        <div class="prose" id="art-body"></div>
+      </article>
+
+      <aside class="toc" id="toc" style="display:none">
+        <div class="toc-inner">
+          <p class="toc-title">本篇目錄</p>
+          <nav id="toc-list"></nav>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="assets/data/guides.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/guide.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新增 / 管理攻略 · Dragon Village 3</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+</head>
+<body>
+
+  <main class="wrap editor-wrap">
+    <div class="editor-head">
+      <h1>新增 / 管理攻略</h1>
+      <p>填寫表單 → 即時預覽 → 按「下載 guides.js」→ 用它覆蓋 <code>assets/data/guides.js</code> 即可更新網站。</p>
+    </div>
+
+    <div class="note">
+      <strong>運作方式：</strong>這個頁面在你的瀏覽器裡編輯，不會自動存檔。編輯內容會暫存在本機（換頁不會不見）。
+      完成後請按下方 <strong>下載 guides.js</strong>，把檔案上傳到 GitHub 覆蓋舊檔，網站就會更新。
+      圖片請放到 <code>assets/img/</code> 資料夾，並在內文用 <code>![說明](assets/img/檔名.png)</code> 插入。
+    </div>
+
+    <div class="editor-grid">
+      <!-- 左：攻略清單 -->
+      <div class="panel">
+        <button class="btn btn--primary" id="btn-new" type="button" style="width:100%; margin-bottom:14px">＋ 新增攻略</button>
+        <h3>攻略清單（<span id="count">0</span>）</h3>
+        <div class="glist" id="glist"></div>
+      </div>
+
+      <!-- 右：編輯表單 -->
+      <div class="panel">
+        <div class="field">
+          <label>標題</label>
+          <input class="input" id="f-title" type="text" placeholder="例如：新手前 7 天衝刺路線" />
+        </div>
+
+        <div class="field">
+          <label>分類 <span class="hint">（可複選；卡片與篩選會用到）</span></label>
+          <div class="tier-check" id="f-tiers"></div>
+        </div>
+
+        <div class="field">
+          <label>標籤 <span class="hint">（用逗號分隔，例如：新手, 培養, 課金建議）</span></label>
+          <input class="input" id="f-tags" type="text" placeholder="新手, 培養" />
+        </div>
+
+        <div class="field">
+          <label>一句話摘要 <span class="hint">（顯示在卡片上）</span></label>
+          <input class="input" id="f-summary" type="text" placeholder="這篇在講什麼，一句話。" />
+        </div>
+
+        <div class="editor-cols">
+          <div class="field" style="margin:0">
+            <label>封面圖 <span class="hint">（可留空）</span></label>
+            <input class="input" id="f-cover" type="text" placeholder="assets/img/檔名.png 或 https://…" />
+          </div>
+          <div class="field" style="margin:0">
+            <label>日期</label>
+            <input class="input" id="f-date" type="date" />
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>網址代號 id <span class="hint">（留空會自動由標題產生；請勿與其他篇重複）</span></label>
+          <input class="input" id="f-id" type="text" placeholder="自動產生" />
+        </div>
+
+        <div class="field">
+          <label>內文 <span class="hint">（Markdown 格式）</span></label>
+          <div class="toolbar" id="toolbar">
+            <button class="tool-btn" data-md="h2" type="button">標題 H2</button>
+            <button class="tool-btn" data-md="h3" type="button">標題 H3</button>
+            <button class="tool-btn" data-md="bold" type="button">粗體</button>
+            <button class="tool-btn" data-md="list" type="button">清單</button>
+            <button class="tool-btn" data-md="table" type="button">表格</button>
+            <button class="tool-btn" data-md="img" type="button">圖片</button>
+            <button class="tool-btn" data-md="video" type="button">影片</button>
+            <button class="tool-btn" data-md="link" type="button">連結</button>
+            <button class="tool-btn" data-md="quote" type="button">引言</button>
+          </div>
+          <div class="editor-cols">
+            <textarea class="textarea" id="f-body" placeholder="在這裡寫攻略內容…"></textarea>
+            <div class="preview-box">
+              <div class="preview-label">即時預覽</div>
+              <div class="prose" id="preview"></div>
+            </div>
+          </div>
+        </div>
+
+        <details style="margin-top:8px">
+          <summary style="cursor:pointer; color:var(--text-soft); font-size:14px">站台設定（標題 / 副標）</summary>
+          <div style="margin-top:12px">
+            <div class="field"><label>網站標題</label><input class="input" id="s-title" type="text" /></div>
+            <div class="field" style="margin:0"><label>網站副標</label><input class="input" id="s-subtitle" type="text" /></div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 全域操作 -->
+    <div class="btn-row" style="justify-content:center; margin-top:26px">
+      <button class="btn btn--primary" id="btn-download" type="button">⬇ 下載 guides.js</button>
+      <button class="btn" id="btn-copy" type="button">📋 複製內容</button>
+      <button class="btn btn--ghost" id="btn-import" type="button">📂 匯入既有 guides.js</button>
+      <button class="btn btn--ghost" id="btn-reset" type="button">↺ 重新讀取資料檔</button>
+      <input type="file" id="file-input" accept=".js,.json,text/javascript,application/json" style="display:none" />
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="assets/data/guides.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/editor.js"></script>
+</body>
+</html>

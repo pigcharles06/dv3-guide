@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dragon Village 3 攻略</title>
+  <meta name="description" content="Dragon Village 3 養龍攻略，依無課・小課／中課／大課分類整理。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <main class="wrap">
+    <!-- Hero -->
+    <section class="hero">
+      <span class="eyebrow" id="hero-eyebrow">Dragon Village 3 · 攻略總覽</span>
+      <h1><span class="grad" id="hero-title">Dragon Village 3 攻略</span></h1>
+      <p class="lead" id="hero-lead">無課・小課・中課・大課，分眾整理的養龍攻略</p>
+
+      <div class="search-shell">
+        <span class="icon">🔍</span>
+        <input class="search-input" id="search" type="search" placeholder="搜尋攻略標題、內容、標籤…" autocomplete="off" />
+      </div>
+
+      <div class="tier-tabs" id="tier-tabs"></div>
+      <div class="tag-row" id="tag-row"></div>
+    </section>
+
+    <!-- 攻略列表 -->
+    <section class="section">
+      <div class="section-head">
+        <h2 id="list-title">全部攻略</h2>
+        <span class="muted" id="list-count"></span>
+      </div>
+      <div class="guide-grid" id="grid"></div>
+      <div class="empty" id="empty" style="display:none">
+        <div class="big">🥚</div>
+        <p>這個分類還沒有攻略。</p>
+        <p>到「新增/管理」頁就能加入第一篇！</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 資料與程式 -->
+  <script src="assets/data/guides.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+</html>
