@@ -623,3 +623,69 @@ img { max-width: 100%; }
   .hero { padding: 30px 0 18px; }
   .guide-grid { grid-template-columns: 1fr; gap: 16px; }
 }
+
+/* =============================================================
+ * 龍圖鑑 (dragons.html)
+ * ============================================================= */
+.dex-controls { display: flex; flex-direction: column; gap: 14px; margin: 8px 0 18px; }
+.dex-filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.dex-filter-row .label { font-size: 12px; color: var(--text-faint); letter-spacing: .08em; margin-right: 2px; }
+.dex-count { text-align: center; color: var(--text-faint); font-size: 14px; margin-bottom: 12px; }
+.dex-count b { color: var(--primary-ink); font-family: var(--font-display); }
+
+.elem {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  padding: 2px 9px; border-radius: 999px; line-height: 1.6; white-space: nowrap;
+}
+.elem + .elem { margin-left: 4px; }
+.type-tag { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--bg-soft); color: var(--text-soft); white-space: nowrap; }
+
+.table-wrap {
+  overflow-x: auto; border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); background: var(--surface);
+  -webkit-overflow-scrolling: touch;
+}
+table.dex { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 880px; }
+table.dex thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--surface-2); color: var(--text);
+  font-weight: 700; text-align: right; white-space: nowrap;
+  padding: 11px 12px; border-bottom: 1px solid var(--hairline-strong);
+}
+table.dex thead th.txt, table.dex tbody td.txt { text-align: left; }
+table.dex thead th.sortable { cursor: pointer; user-select: none; }
+table.dex thead th.sortable:hover { color: var(--primary-ink); }
+table.dex thead th .arr { font-size: 10px; opacity: .35; margin-left: 3px; }
+table.dex thead th.active .arr { opacity: 1; color: var(--primary-ink); }
+table.dex tbody td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+table.dex tbody tr:hover { background: var(--bg-soft); }
+table.dex tbody tr.sel { background: var(--grad-soft); }
+table.dex .name { font-weight: 700; color: var(--text); }
+table.dex .passive { color: var(--text-soft); font-size: 13px; }
+table.dex td.num.best { color: var(--primary-ink); font-weight: 700; }
+.dex-check { width: 17px; height: 17px; accent-color: var(--primary); cursor: pointer; }
+.col-pin { position: sticky; left: 0; background: var(--surface); z-index: 1; }
+table.dex thead th.col-pin { z-index: 3; background: var(--surface-2); }
+table.dex tbody tr:hover .col-pin { background: var(--bg-soft); }
+table.dex tbody tr.sel .col-pin { background: #efe9ff; }
+html[data-theme="dark"] table.dex tbody tr.sel .col-pin { background: #241c46; }
+
+/* 比較面板 */
+.compare {
+  background: var(--surface); border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+  padding: 18px; margin: 0 0 18px;
+}
+.compare-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.compare-head h3 { margin: 0; font-family: var(--font-display); font-size: 1.15rem; }
+.compare-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 860px) { .compare-grid { grid-template-columns: 360px 1fr; align-items: start; } }
+.radar-box { position: relative; width: 100%; max-width: 360px; margin: 0 auto; aspect-ratio: 1 / 1; }
+.cmp-table-wrap { overflow-x: auto; }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.cmp th, table.cmp td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+table.cmp th:first-child, table.cmp td:first-child { text-align: left; }
+table.cmp thead th { color: var(--text); font-weight: 700; }
+table.cmp td.best { color: var(--primary-ink); font-weight: 700; }
+.chip-x { border: 0; background: transparent; color: var(--text-faint); cursor: pointer; font-size: 14px; margin-left: 4px; }
+.chip-x:hover { color: #e0556e; }

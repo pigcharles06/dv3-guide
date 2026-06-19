@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>龍圖鑑 · Dragon Village 3 攻略</title>
+  <meta name="description" content="Dragon Village 3 龍圖鑑：六圍數值、屬性、被動，可篩選、排序、勾選比較。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <main class="wrap">
+    <section class="hero" style="padding-bottom:8px">
+      <span class="eyebrow">龍圖鑑 · 能力比較</span>
+      <h1><span class="grad">龍圖鑑</span></h1>
+      <p class="lead" id="dex-lead">六圍數值、屬性與被動，可搜尋、排序，勾選多隻做比較。</p>
+      <div class="search-shell">
+        <span class="icon">🔍</span>
+        <input class="search-input" id="dex-search" type="search" placeholder="搜尋龍名或被動…" autocomplete="off" />
+      </div>
+    </section>
+
+    <div class="dex-controls">
+      <div class="dex-filter-row" id="main-filter"><span class="label">主屬性</span></div>
+      <div class="dex-filter-row" id="type-filter"><span class="label">類型</span></div>
+    </div>
+
+    <!-- 比較面板 -->
+    <section class="compare" id="compare" style="display:none">
+      <div class="compare-head">
+        <h3>數值比較（<span id="cmp-count">0</span> 隻）</h3>
+        <button class="btn btn--ghost" id="cmp-clear" type="button">清除比較</button>
+      </div>
+      <div id="cmp-chips" style="margin-bottom:12px"></div>
+      <div class="compare-grid">
+        <div class="radar-box"><canvas id="radar"></canvas></div>
+        <div class="cmp-table-wrap"><table class="cmp" id="cmp-table"></table></div>
+      </div>
+    </section>
+
+    <p class="dex-count">顯示 <b id="shown">0</b> / <span id="total">0</span> 隻　·　資料來源：Yeng（Discord）圖鑑能力表　·　勾選左側方框即可比較（最多 6 隻）</p>
+
+    <div class="table-wrap">
+      <table class="dex" id="dex-table"></table>
+    </div>
+    <p class="dex-count" style="margin-top:14px">數值為滿星參考值；簡轉繁整理，若有誤歡迎回報。</p>
+  </main>
+
+  <script src="assets/data/dragons.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/dex.js"></script>
+</body>
+</html>
