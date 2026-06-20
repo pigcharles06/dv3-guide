@@ -6,6 +6,7 @@
   "use strict";
 
   DV3.mountHeader("guide");
+  (function(){ if(document.getElementById("guide-css")) return; var st=document.createElement("style"); st.id="guide-css"; st.textContent=".article-layout > article{border-radius:var(--radius-lg);padding:30px clamp(18px,4vw,40px)}\n.toc-inner{border-radius:var(--radius-lg);padding:16px 18px}\n.back-link{display:inline-block;border-radius:999px;padding:6px 15px}\n.article-meta{color:var(--text-soft)}\n@media(max-width:760px){.article-layout > article{padding:22px 18px}}\n"; document.head.appendChild(st); })();
 
   var id = DV3.queryParam("id");
   var g = id ? DV3.getGuide(id) : null;

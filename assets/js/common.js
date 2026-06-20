@@ -87,8 +87,7 @@ window.DV3 = (function () {
   function currentTheme() {
     var saved = safeGet(THEME_KEY);
     if (saved === "light" || saved === "dark") return saved;
-    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    return prefersDark ? "dark" : "light";
+    return "light";
   }
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
@@ -97,6 +96,8 @@ window.DV3 = (function () {
       btns[i].setAttribute("aria-label", theme === "dark" ? "切換到亮色模式" : "切換到暗色模式");
       btns[i].textContent = theme === "dark" ? "☀" : "☾";
     }
+    var bgd = document.querySelectorAll(".bg-dragon");
+    for (var j = 0; j < bgd.length; j++) bgd[j].style.opacity = theme === "dark" ? "0.46" : "0.34";
   }
   function initTheme() { applyTheme(currentTheme()); }
   function toggleTheme() {
@@ -163,14 +164,67 @@ window.DV3 = (function () {
     }).join("");
   }
 
+  function mountBackground() {
+    if (document.querySelector(".bg-stage")) return;
+    var N = 10, base = "assets/img/dragons/bg/";
+    if (!document.getElementById("bg-kf")) {
+      var kf = document.createElement("style");
+      kf.id = "bg-kf";
+      kf.textContent =
+        "@keyframes dv3kb{0%{transform:scale(1.05) translate(0,0)}100%{transform:scale(1.16) translate(-2.2%,-1.6%)}}" +
+        ".bg-stage{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;background:#0b0b10;transition:transform .6s cubic-bezier(.22,1,.36,1)}" +
+        ".bg-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.8s ease-in-out;will-change:opacity,transform;animation:dv3kb 22s ease-in-out infinite alternate}" +
+        ".bg-slide.on{opacity:1}" +
+        ".bg-scrim{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(130% 100% at 50% 34%, rgba(8,8,13,.42), rgba(8,8,13,.72) 80%)}" +
+        "@media (prefers-reduced-motion: reduce){.bg-slide{animation:none}}";
+      document.head.appendChild(kf);
+    }
+    var stage = document.createElement("div");
+    stage.className = "bg-stage";
+    stage.setAttribute("aria-hidden", "true");
+    var slides = [];
+    for (var i = 1; i <= N; i++) {
+      var s = document.createElement("div");
+      s.className = "bg-slide" + (i === 1 ? " on" : "");
+      s.style.backgroundImage = "url('" + base + "bg-" + (i < 10 ? "0" : "") + i + ".webp')";
+      s.style.animationDelay = (-(i * 2.4)) + "s";
+      stage.appendChild(s);
+      slides.push(s);
+    }
+    var scrim = document.createElement("div");
+    scrim.className = "bg-scrim";
+    scrim.setAttribute("aria-hidden", "true");
+    document.body.insertBefore(scrim, document.body.firstChild);
+    document.body.insertBefore(stage, document.body.firstChild);
+    var cur = 0;
+    if (N > 1) {
+      setInterval(function () {
+        slides[cur].classList.remove("on");
+        cur = (cur + 1) % N;
+        slides[cur].classList.add("on");
+      }, 6000);
+    }
+    var raf = null, tx = 0, ty = 0;
+    function ap() { stage.style.transform = "translate(" + (tx * -14) + "px," + (ty * -10) + "px)"; raf = null; }
+    window.addEventListener("mousemove", function (e) {
+      tx = e.clientX / window.innerWidth - 0.5;
+      ty = e.clientY / window.innerHeight - 0.5;
+      if (!raf) raf = requestAnimationFrame(ap);
+    });
+  }
+
+  function injectGlass(){ if(document.getElementById("glass-css")) return; var st=document.createElement("style"); st.id="glass-css"; st.textContent="html[data-theme=\"light\"]{--text-soft:#423e36;--text-faint:#5f5849}\n.nav-pill,.search-shell,.tier-tabs,.guide-card,.table-wrap,.compare,.panel,.note,.preview-box,.empty,.footer-inner,.article-layout > article,.toc-inner,.back-link,.hero .eyebrow,.hero h1,.hero .lead,.section-head h2,.section-head .muted,.editor-head h1,.editor-head p,.dex-count,.dex-filter-row .label{backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%)}\n.nav-pill,.search-shell,.tier-tabs,.table-wrap,.compare,.panel,.note,.preview-box,.empty,.footer-inner,.article-layout > article,.toc-inner,.back-link{background:rgba(20,17,26,.46)!important;border:1px solid rgba(255,255,255,.13)!important}\n.guide-card{background:rgba(22,18,28,.46)!important;border:1px solid rgba(255,255,255,.13)!important;box-shadow:0 14px 38px -16px rgba(0,0,0,.55)!important}\n.guide-card:hover{border-color:rgba(255,255,255,.24)!important;box-shadow:0 22px 50px -18px rgba(0,0,0,.66)!important}\n.nav-pill{box-shadow:0 10px 34px -12px rgba(0,0,0,.5)!important}\n.note,.empty,.footer-inner,.preview-box,.panel{border-radius:var(--radius-lg)!important}\n.search-shell{border-radius:999px!important}\n.search-input{background:transparent!important;border:0!important;box-shadow:none!important}\n.hero .eyebrow,.hero h1,.hero .lead,.editor-head h1,.editor-head p,.dex-count{display:block!important;width:fit-content;max-width:100%;margin-left:auto!important;margin-right:auto!important;background:rgba(20,17,26,.44)!important;border:1px solid rgba(255,255,255,.13)}\n.hero .eyebrow{border-radius:999px!important;padding:6px 16px!important;margin-bottom:16px!important}\n.hero h1{border-radius:24px!important;padding:6px 30px!important;margin-top:0!important;margin-bottom:16px!important}\n.hero .lead{border-radius:999px!important;padding:8px 22px!important;margin-bottom:8px!important}\n.editor-head h1{border-radius:22px!important;padding:8px 26px!important;margin-bottom:12px!important}\n.editor-head p{border-radius:16px!important;padding:8px 18px!important}\n.dex-count{border-radius:999px!important;padding:6px 18px!important}\n.section-head h2{background:rgba(20,17,26,.46)!important;border:1px solid rgba(255,255,255,.13);border-radius:14px!important;padding:6px 18px!important}\n.section-head .muted{background:rgba(20,17,26,.44)!important;border:1px solid rgba(255,255,255,.13);border-radius:999px!important;padding:5px 14px!important}\n.dex-filter-row .label{background:rgba(20,17,26,.44)!important;border:1px solid rgba(255,255,255,.13);border-radius:999px!important;padding:4px 13px!important}\n.chip{background:rgba(20,17,26,.50)!important;border:1px solid rgba(255,255,255,.13)!important;color:var(--text-soft)}\n.chip.is-active{background:rgba(212,173,111,.34)!important;border-color:rgba(212,173,111,.55)!important;color:#fff!important}\n.input,.textarea{background:rgba(20,17,26,.44)!important;border:1px solid rgba(255,255,255,.14)!important}\nhtml[data-theme=\"light\"] .nav-pill,html[data-theme=\"light\"] .search-shell,html[data-theme=\"light\"] .tier-tabs,html[data-theme=\"light\"] .table-wrap,html[data-theme=\"light\"] .compare,html[data-theme=\"light\"] .panel,html[data-theme=\"light\"] .note,html[data-theme=\"light\"] .preview-box,html[data-theme=\"light\"] .empty,html[data-theme=\"light\"] .footer-inner,html[data-theme=\"light\"] .article-layout > article,html[data-theme=\"light\"] .toc-inner,html[data-theme=\"light\"] .back-link,html[data-theme=\"light\"] .hero .eyebrow,html[data-theme=\"light\"] .hero h1,html[data-theme=\"light\"] .hero .lead,html[data-theme=\"light\"] .section-head h2,html[data-theme=\"light\"] .section-head .muted,html[data-theme=\"light\"] .editor-head h1,html[data-theme=\"light\"] .editor-head p,html[data-theme=\"light\"] .dex-count,html[data-theme=\"light\"] .dex-filter-row .label{background:rgba(250,247,241,.64)!important;border:1px solid rgba(0,0,0,.12)!important}\nhtml[data-theme=\"light\"] .guide-card{background:rgba(252,250,245,.68)!important;border:1px solid rgba(0,0,0,.12)!important}\nhtml[data-theme=\"light\"] .chip{background:rgba(250,247,241,.72)!important;border-color:rgba(0,0,0,.12)!important;color:var(--text-soft)}\nhtml[data-theme=\"light\"] .input,html[data-theme=\"light\"] .textarea{background:rgba(250,247,241,.64)!important;border-color:rgba(0,0,0,.14)!important}\n"; document.head.appendChild(st); }
+
   function mountHeader(active) {
+    mountBackground();
+    injectGlass();
     var info = siteInfo();
     var header = document.createElement("header");
     header.className = "site-nav";
     header.innerHTML =
       '<div class="nav-pill">' +
         '<a class="nav-brand" href="index.html">' +
-          '<span class="nav-logo">🐉</span>' +
+          '<img class="nav-logo" src="assets/img/dragons/dragonslayer.webp" alt="" style="width:28px;height:28px;border-radius:7px;object-fit:cover;vertical-align:middle" />' +
           '<span class="nav-title">' + escapeHtml(info.title) + "</span>" +
         "</a>" +
         '<nav class="nav-links">' +

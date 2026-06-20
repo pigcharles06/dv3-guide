@@ -88,7 +88,7 @@
   function cardHtml(g) {
     var cover = g.cover
       ? '<img src="' + DV3.escapeHtml(g.cover) + '" alt="' + DV3.escapeHtml(g.title) + '" loading="lazy" />'
-      : '<span class="placeholder">🐲</span>';
+      : '<img class="placeholder-img" src="assets/img/dragons/dragonslayer.webp" alt="" style="width:48px;height:48px;border-radius:10px;opacity:.9" />';
     var tags = (g.tags || []).slice(0, 3).map(function (t) {
       return '<span class="card-tag">' + DV3.escapeHtml(t) + "</span>";
     }).join("");
@@ -145,4 +145,26 @@
   buildTags();
   render();
   DV3.mountFooter();
+})();
+
+/* ---------- 首頁雙龍背景：滑鼠視差 3D ---------- */
+(function heroParallax(){
+  var st = document.getElementById("hero-stage");
+  if (!st) return;
+  var hero = st.parentNode;
+  var l = st.querySelector(".hero-dragon--l"), r = st.querySelector(".hero-dragon--r");
+  if (!l || !r) return;
+  var raf = null, tx = 0, ty = 0;
+  function apply(){
+    l.style.transform = "translateY(-50%) translate(" + (tx*-18) + "px," + (ty*-12) + "px) rotateY(" + (16 - tx*8) + "deg) rotateZ(-4deg)";
+    r.style.transform = "translateY(-50%) translate(" + (tx*18) + "px," + (ty*-12) + "px) rotateY(" + (-16 - tx*8) + "deg) rotateZ(4deg) scaleX(-1)";
+    raf = null;
+  }
+  hero.addEventListener("mousemove", function(e){
+    var b = hero.getBoundingClientRect();
+    tx = (e.clientX - b.left)/b.width - 0.5;
+    ty = (e.clientY - b.top)/b.height - 0.5;
+    if (!raf) raf = requestAnimationFrame(apply);
+  });
+  hero.addEventListener("mouseleave", function(){ l.style.transform=""; r.style.transform=""; });
 })();
